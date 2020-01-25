@@ -108,9 +108,9 @@
     UIStackView *buttonsStack = [interfaceBuilder makeGroupStackWithSpacing:10];
 
     if (self.actionButtonTitle) {
-        BLTNHighlightButtonWrapper *buttonWrapper = [interfaceBuilder makeActionButtonWithTitle:self.actionButtonTitle];
-        [buttonsStack addArrangedSubview:buttonWrapper];
-        self.actionButton = buttonWrapper.button;
+        UIButton *button = [interfaceBuilder makeActionButtonWithTitle:self.actionButtonTitle];
+        [buttonsStack addArrangedSubview:button];
+        self.actionButton = button;
     }
 
     if (self.alternativeButtonTitle) {

@@ -103,43 +103,28 @@ import UIKit
      * - parameter title: The title of the button.
      */
 
-    @objc open func makeActionButton(title: String) -> BLTNHighlightButtonWrapper {
+    @objc open func makeActionButton(title: String) -> UIButton {
 
-        let actionButton = HighlightButton()
+        let actionButton = RoundedButton()
         actionButton.cornerRadius = appearance.actionButtonCornerRadius
-        
-        if let actionButtonImage = appearance.actionButtonImage {
-            actionButton.setBackgroundImage(actionButtonImage, for: .normal)
-            
-        } else {
-            actionButton.setBackgroundColor(appearance.actionButtonColor, forState: .normal)
-        }
-        
-        actionButton.setTitleColor(appearance.actionButtonTitleColor, for: .normal)
-        actionButton.contentHorizontalAlignment = .center
-
         actionButton.setTitle(title, for: .normal)
+        actionButton.setTitleColor(appearance.actionButtonTitleColor, for: .normal)
         actionButton.titleLabel?.font = appearance.makeActionButtonFont()
         if #available(iOS 10.0, *) {
             actionButton.titleLabel?.adjustsFontForContentSizeCategory = true
         }
         actionButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        actionButton.contentEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        actionButton.setBackgroundColor(appearance.actionButtonColor, forState: .normal)
 
-        actionButton.clipsToBounds = true
-
-        if let color = appearance.actionButtonBorderColor {
-          actionButton.layer.borderColor = color.cgColor
+        if let borderColor = appearance.actionButtonBorderColor {
+          actionButton.clipsToBounds = true
+          actionButton.layer.borderColor = borderColor.cgColor
           actionButton.layer.borderWidth = appearance.actionButtonBorderWidth
         }
 
-        let wrapper = BLTNHighlightButtonWrapper(button: actionButton)
-        wrapper.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        return actionButton
 
-        let heightConstraint = wrapper.heightAnchor.constraint(equalToConstant: 55)
-        heightConstraint.priority = .defaultHigh
-        heightConstraint.isActive = true
-
-        return wrapper
 
     }
 
