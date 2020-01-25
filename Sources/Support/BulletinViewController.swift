@@ -308,21 +308,7 @@ extension BulletinViewController {
     }
 
     func bottomMargin() -> CGFloat {
-
-        if #available(iOS 11, *) {
-            if view.safeAreaInsets.bottom > 0 {
-                return 0
-            }
-        }
-
-        var bottomMargin: CGFloat = manager?.edgeSpacing.rawValue ?? 12
-
-        if manager?.hidesHomeIndicator == true {
-            bottomMargin = manager?.edgeSpacing.rawValue == 0 ? 0 : 6
-        }
-
-        return bottomMargin
-
+        return defaultBottomMargin
     }
 
     /// Moves the content view to its final location on the screen. Use during presentation.
