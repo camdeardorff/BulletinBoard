@@ -39,6 +39,10 @@ import UIKit
         titleLabel.lineBreakMode = .byWordWrapping
 
         titleLabel.font = appearance.makeTitleFont()
+        if #available(iOS 10.0, *) {
+            titleLabel.adjustsFontForContentSizeCategory = true
+        }
+        titleLabel.adjustsFontSizeToFitWidth = true
 
         let needsCloseButton = item?.isDismissable == true && item?.requiresCloseButton == true
         let inset: CGFloat = needsCloseButton ? 12 + 30 : 0
@@ -58,6 +62,10 @@ import UIKit
         descriptionLabel.textColor = appearance.descriptionTextColor
         descriptionLabel.numberOfLines = 0
         descriptionLabel.font = appearance.makeDescriptionFont()
+        if #available(iOS 10.0, *) {
+            descriptionLabel.adjustsFontForContentSizeCategory = true
+        }
+        descriptionLabel.adjustsFontSizeToFitWidth = true
 
         return descriptionLabel
 
@@ -112,6 +120,10 @@ import UIKit
 
         actionButton.setTitle(title, for: .normal)
         actionButton.titleLabel?.font = appearance.makeActionButtonFont()
+        if #available(iOS 10.0, *) {
+            actionButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        }
+        actionButton.titleLabel?.adjustsFontSizeToFitWidth = true
 
         actionButton.clipsToBounds = true
 
@@ -146,6 +158,10 @@ import UIKit
         alternativeButton.setTitle(title, for: .normal)
         alternativeButton.setTitleColor(appearance.alternativeButtonTitleColor, for: .normal)
         alternativeButton.titleLabel?.font = appearance.makeAlternativeButtonFont()
+        if #available(iOS 10.0, *) {
+            alternativeButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        }
+        alternativeButton.titleLabel?.adjustsFontSizeToFitWidth = true
 
         if let color = appearance.alternativeButtonBorderColor {
           alternativeButton.clipsToBounds = true

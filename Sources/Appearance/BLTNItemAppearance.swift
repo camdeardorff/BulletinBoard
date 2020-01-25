@@ -136,7 +136,7 @@ extension BLTNItemAppearance {
         if let titleFontDescriptor = self.titleFontDescriptor {
             return UIFont(descriptor: titleFontDescriptor, size: titleFontSize)
         } else {
-            return UIFont.systemFont(ofSize: titleFontSize, weight: .medium)
+            return UIFont.systemFont(ofSize: titleFontSize, weight: .bold)
         }
 
     }
