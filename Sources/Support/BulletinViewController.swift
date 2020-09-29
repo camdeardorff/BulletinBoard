@@ -117,9 +117,9 @@ extension BulletinViewController {
 
         // Content View
 
-        centerXConstraint = contentView.centerXAnchor.constraint(equalTo: view.safeCenterXAnchor)
+        centerXConstraint = contentView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
 
-        centerYConstraint = contentView.centerYAnchor.constraint(equalTo: view.safeCenterYAnchor)
+        centerYConstraint = contentView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         centerYConstraint.constant = 2500
 
         widthConstraint = contentView.widthAnchor.constraint(equalToConstant: 444)
@@ -147,7 +147,7 @@ extension BulletinViewController {
         stackTrailingConstraint = contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         stackTrailingConstraint.isActive = true
 
-        minYConstraint = contentView.topAnchor.constraint(greaterThanOrEqualTo: view.safeTopAnchor)
+        minYConstraint = contentView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor)
         minYConstraint.isActive = true
         minYConstraint.priority = UILayoutPriority.required
 
@@ -214,15 +214,15 @@ extension BulletinViewController {
         let cardPadding = manager.edgeSpacing.rawValue
 
         // Set left and right padding
-        leadingConstraint = contentView.leadingAnchor.constraint(equalTo: view.safeLeadingAnchor,
+        leadingConstraint = contentView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                                                                  constant: cardPadding)
 
-        trailingConstraint = contentView.trailingAnchor.constraint(equalTo: view.safeTrailingAnchor,
+        trailingConstraint = contentView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                                                                    constant: -cardPadding)
 
         // Set maximum width with padding
 
-        maxWidthConstraint = contentView.widthAnchor.constraint(lessThanOrEqualTo: view.safeWidthAnchor,
+        maxWidthConstraint = contentView.widthAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.widthAnchor,
                                                                 constant: -(cardPadding * 2))
 
         maxWidthConstraint.priority = .required
@@ -231,7 +231,7 @@ extension BulletinViewController {
         if manager.hidesHomeIndicator {
             contentBottomConstraint = contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         } else {
-            contentBottomConstraint = contentView.bottomAnchor.constraint(equalTo: view.safeBottomAnchor)
+            contentBottomConstraint = contentView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         }
 
         contentBottomConstraint.constant = 1000
@@ -312,7 +312,17 @@ extension BulletinViewController {
     }
 
     func bottomMargin() -> CGFloat {
-        return defaultBottomMargin
+        if view.safeAreaInsets.bottom > 0 {
+            return 0
+        }
+
+        var bottomMargin: CGFloat = manager?.edgeSpacing.rawValue ?? 12
+
+        if manager?.hidesHomeIndicator == true {
+            bottomMargin = manager?.edgeSpacing.rawValue == 0 ? 0 : 6
+        }
+
+        return bottomMargin
     }
 
     /// Moves the content view to its final location on the screen. Use during presentation.
@@ -406,12 +416,7 @@ extension BulletinViewController {
             return
         }
 
-        var defaultRadius: NSNumber = 12
-
-        if #available(iOS 11.0, *) {
-            defaultRadius = screenHasRoundedCorners ? 36 : 12
-        }
-
+        let defaultRadius: NSNumber = screenHasRoundedCorners ? 36 : 12
         contentView.cornerRadius = CGFloat((manager?.cardCornerRadius ?? defaultRadius).doubleValue)
 
     }
@@ -567,13 +572,8 @@ extension BulletinViewController {
 
         UIView.animate(withDuration: duration, delay: 0, options: animationOptions, animations: {
             var bottomSpacing = -(keyboardFrameFinal.size.height + self.defaultBottomMargin)
-
-            if #available(iOS 11.0, *) {
-
-                if self.manager?.hidesHomeIndicator == false {
-                    bottomSpacing += self.view.safeAreaInsets.bottom
-                }
-
+            if self.manager?.hidesHomeIndicator == false {
+                bottomSpacing += self.view.safeAreaInsets.bottom
             }
 
             self.minYConstraint.isActive = false

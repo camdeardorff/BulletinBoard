@@ -12,23 +12,20 @@ import UIKit
 
 @objc open class BLTNInterfaceBuilder: NSObject {
 
-    /// The item for which the interface builder was created.
-    @objc public weak var item: BLTNItem?
-
     /// The appearance to use to generate the items.
     @objc public let appearance: BLTNItemAppearance
 
     /// Creates a new interface builder.
-    @objc public required init(appearance: BLTNItemAppearance, item: BLTNItem) {
+    @objc public required init(appearance: BLTNItemAppearance) {
         self.appearance = appearance
-        self.item = item
     }
 
     /**
      * Creates a standard title label.
      */
 
-    @objc open func makeTitleLabel() -> BLTNTitleLabelContainer {
+    @objc(makeTitleLabelNextToCloseButton:)
+    open func makeTitleLabel(isNextToCloseButton: Bool) -> BLTNTitleLabelContainer {
 
         let titleLabel = UILabel()
         titleLabel.textAlignment = .center
@@ -48,7 +45,6 @@ import UIKit
         let inset: CGFloat = needsCloseButton ? 12 + 30 : 0
 
         return BLTNTitleLabelContainer(label: titleLabel, horizontalInset: inset)
-
     }
 
     /**
@@ -105,8 +101,23 @@ import UIKit
 
     @objc open func makeActionButton(title: String) -> UIButton {
 
-        let actionButton = RoundedButton()
-        actionButton.cornerRadius = appearance.actionButtonCornerRadius
+        let actionButton = HighlightButton()
+        actionButton.layer.cornerRadius = appearance.actionButtonCornerRadius
+        
+        if #available(iOS 13, *) {
+            actionButton.layer.cornerCurve = .continuous
+        }
+        
+        if let actionButtonImage = appearance.actionButtonImage {
+            actionButton.setBackgroundImage(actionButtonImage, for: .normal)
+            
+        } else {
+            actionButton.setBackgroundColor(appearance.actionButtonColor, forState: .normal)
+        }
+        
+        actionButton.setTitleColor(appearance.actionButtonTitleColor, for: .normal)
+        actionButton.contentHorizontalAlignment = .center
+
         actionButton.setTitle(title, for: .normal)
         actionButton.setTitleColor(appearance.actionButtonTitleColor, for: .normal)
         actionButton.titleLabel?.font = appearance.makeActionButtonFont()
@@ -138,8 +149,13 @@ import UIKit
 
     @objc open func makeAlternativeButton(title: String) -> UIButton {
 
-        let alternativeButton = RoundedButton()
-        alternativeButton.cornerRadius = appearance.alternativeButtonCornerRadius
+        let alternativeButton = UIButton()
+        alternativeButton.layer.cornerRadius = appearance.alternativeButtonCornerRadius
+        
+        if #available(iOS 13, *) {
+            alternativeButton.layer.cornerCurve = .continuous
+        }
+        
         alternativeButton.setTitle(title, for: .normal)
         alternativeButton.setTitleColor(appearance.alternativeButtonTitleColor, for: .normal)
         alternativeButton.titleLabel?.font = appearance.makeAlternativeButtonFont()
