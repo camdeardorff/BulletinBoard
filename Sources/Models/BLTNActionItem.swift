@@ -186,7 +186,7 @@ import UIKit
         if let actionButtonTitle = actionButtonTitle {
             let buttonView = interfaceBuilder.makeActionButton(title: actionButtonTitle)
             buttonsStack.addArrangedSubview(buttonView)
-            self.actionButton = buttonView.button
+            self.actionButton = buttonView
         }
         
         if let alternativeButtonTitle = self.alternativeButtonTitle {

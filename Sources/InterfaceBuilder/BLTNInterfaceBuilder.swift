@@ -41,8 +41,8 @@ import UIKit
         }
         titleLabel.adjustsFontSizeToFitWidth = true
 
-        let needsCloseButton = item?.isDismissable == true && item?.requiresCloseButton == true
-        let inset: CGFloat = needsCloseButton ? 12 + 30 : 0
+        titleLabel.font = appearance.makeTitleFont()
+        let inset: CGFloat = isNextToCloseButton ? 12 + 30 : 0
 
         return BLTNTitleLabelContainer(label: titleLabel, horizontalInset: inset)
     }
